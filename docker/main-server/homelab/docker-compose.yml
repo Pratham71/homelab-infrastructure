@@ -1,0 +1,93 @@
+services:
+  openwebui:
+    container_name: openwebui
+    image: ghcr.io/open-webui/open-webui:latest
+    restart: unless-stopped
+    volumes:
+      - openwebui_data:/app/backend/data
+    ports:
+      - "3000:8080"            # Web UI (LAN + Tailscale)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - OLLAMA_API_BASE_URL=http://host.docker.internal:11434
+      - WEBUI_SECRET_KEY=69214d76614f72133f35b23b1578096dd82f0f43976ae3cbe91c6061cc669e11
+      - ENABLE_SIGNUP=true
+      - CORS_ALLOW_ORIGIN=http://<tailscale-ip>:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  n8n:
+    container_name: n8n
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    ports:
+      - "5678:5678"            # n8n (LAN + Tailscale)
+    volumes:
+      - n8n_data:/home/node/.n8n
+    environment:
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - N8N_SECURE_COOKIE=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5678"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+      
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"            # HTTP UI
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/api/status"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+      
+  netdata:
+    container_name: netdata
+    image: netdata/netdata:latest
+    restart: unless-stopped
+    hostname: HomeServer
+    ports:
+      - "19999:19999"          # Netdata (LAN + Tailscale)
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdata_config:/etc/netdata
+      - netdata_lib:/var/lib/netdata
+      - netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:19999"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+volumes:
+  ollama_data:
+  openwebui_data:
+  n8n_data:
+  portainer_data:
+  netdata_config:
+  netdata_lib:
+  netdata_cache:
+  uptimekuma_data:

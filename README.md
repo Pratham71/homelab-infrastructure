@@ -96,6 +96,7 @@ The setup consists of a high-performance Debian-based main server for workloads 
 ---
 
 ## 🔌 Architecture Diagram
+
 ```text
 Client (Laptop / Phone)
         │
@@ -119,27 +120,13 @@ Client (Laptop / Phone)
 
 ---
 
-## 📸 Screenshots
-
-* Portainer dashboard
-* Netdata monitoring
-* Homepage dashboard
-* Uptime Kuma status page
-* Dozzle logs
-* tmux session
-
----
-
-## 📁 Repository Structure
+📁 Repository Structure
 
 ```text
 .
 ├── docker/
 │   ├── main-server/
 │   └── raspberry-pi/
-├── docs/
-│   └── architecture.png
-├── screenshots/
 └── README.md
 ```
 
@@ -148,14 +135,3 @@ Client (Laptop / Phone)
 ## 🎯 Why I Built This
 
 This project started as a self-initiated effort to explore self-hosting and real-world infrastructure management. It evolved into a practical environment for running production-like services, experimenting with automation, and managing distributed systems.
-
----
-
-## 🔮 Future Improvements
-
-* Reverse proxy with domain-based routing (NGINX / Traefik)
-* Automated backups for persistent volumes
-* Centralized metrics stack (Prometheus + Grafana)
-* Network segmentation and service isolation
-* Secrets management for environment variables
-
