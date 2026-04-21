@@ -102,17 +102,6 @@ This allows full control and monitoring of the system from any authorized device
 
 ---
 
-## 📸 Screenshots
-
-> Add screenshots of:
-
-* Open WebUI interface
-* n8n workflows
-* Portainer dashboard
-* Netdata monitoring
-
----
-
 ## 🎯 Use Cases
 
 * Running and testing local AI models
